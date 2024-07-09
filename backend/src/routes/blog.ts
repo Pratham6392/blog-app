@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { verify } from "hono/jwt";
-import { createPostInput, updatePostInput } from "@sai48/medium-validate2";
+import { createBlogInput,updateBlogInput } from "@pratham2002/medium-zod";
 
 export const blogRouter = new Hono<{
     Bindings: {
@@ -38,7 +38,7 @@ blogRouter.use("/*", async (c, next) => {
 
 blogRouter.post('/', async (c) => {
     const body = await c.req.json();
-    const { success } = createPostInput.safeParse(body);
+    const { success } = createBlogInput.safeParse(body);
     if (!success) {
         c.status(411);
         return c.json({
@@ -66,7 +66,8 @@ blogRouter.post('/', async (c) => {
 
 blogRouter.put('/', async (c) => {
     const body = await c.req.json();
-    const { success } = updatePostInput.safeParse(body);
+    
+    const { success } = updateBlogInput.safeParse(body);
     if (!success) {
         c.status(411);
         return c.json({
@@ -93,6 +94,7 @@ blogRouter.put('/', async (c) => {
     })
 })
 
+
 // Todo: add pagination
 blogRouter.get('/bulk', async (c) => {
     const prisma = new PrismaClient({
@@ -109,6 +111,8 @@ blogRouter.get('/bulk', async (c) => {
                 }
             }
         }
+    
+        
     });
 
     return c.json({

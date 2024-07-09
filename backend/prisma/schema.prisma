@@ -24,7 +24,7 @@ model Blog{
   id Int @id @default(autoincrement())
   title String  @db.VarChar(255)
   content String @db.Text
- 
+ published Boolean @default(false)
   author User @relation(fields: [authorId], references: [id])
   authorId Int
 }
